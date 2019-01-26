@@ -34,15 +34,40 @@ class Developer {
         self.rightSpoon = rightSpoon
     }
     
-    func think() { print("Developer is thinking") }
+    func think() {
+        leftSpoon.pickUp()
+        print("Developer has picked up the left spoon")
+        
+        rightSpoon.pickUp()
+        print("Developer has picked up the right spoon")
+
+        print("Developer is thinking")
+
+    }
     
-    func eat() {   print("Developer is eating") }
+    func eat() {
+        
+        print("Developer is eating")
+        
+        usleep(3000000)
+        
+        defer {
+            leftSpoon.putDown()
+            rightSpoon.putDown()
+            print("spoons down")
+        }
+    }
     
     func run() {
         
         think()
         eat()
     }
-    
-    
 }
+
+var pinkSpoon = Spoon()
+var blueSpoon = Spoon()
+
+let a = Developer(leftSpoon: pinkSpoon, rightSpoon: blueSpoon)
+
+a.run()
