@@ -16,9 +16,12 @@ class Spoon {
     
     func pickUp() {
         
+        lock.lock()
+        
     }
     
     func putDown() {
+        lock.unlock()
         
     }
 }
@@ -26,35 +29,37 @@ class Spoon {
 
 class Developer {
     
+    var name: String
     var leftSpoon: Spoon
     var rightSpoon: Spoon
     
-    init(leftSpoon: Spoon, rightSpoon: Spoon) {
+    init(name: String, leftSpoon: Spoon, rightSpoon: Spoon) {
+        self.name = name
         self.leftSpoon = leftSpoon
         self.rightSpoon = rightSpoon
     }
     
     func think() {
         leftSpoon.pickUp()
-        print("Developer has picked up the left spoon")
+        print("\(name) has picked up the left spoon")
         
         rightSpoon.pickUp()
-        print("Developer has picked up the right spoon")
+        print("\(name) has picked up the right spoon")
 
-        print("Developer is thinking")
+        print("\(name) is thinking")
 
     }
     
     func eat() {
         
-        print("Developer is eating")
+        print("\(name) is eating")
         
         usleep(3000000)
         
         defer {
             leftSpoon.putDown()
             rightSpoon.putDown()
-            print("spoons down")
+            print("\(name) put the spoons down")
         }
     }
     
@@ -65,9 +70,23 @@ class Developer {
     }
 }
 
-var pinkSpoon = Spoon()
-var blueSpoon = Spoon()
+let lock = NSLock()
 
-let a = Developer(leftSpoon: pinkSpoon, rightSpoon: blueSpoon)
+let a = Spoon()
+let b = Spoon()
+let c = Spoon()
+let d = Spoon()
+let e = Spoon()
 
-a.run()
+
+let developer1 = Developer(name: "Developer 1", leftSpoon: a, rightSpoon: b)
+let developer2 = Developer(name: "Developer 2", leftSpoon: b, rightSpoon: c)
+let developer3 = Developer(name: "Developer 3", leftSpoon: c, rightSpoon: d)
+let developer4 = Developer(name: "Developer 4", leftSpoon: d, rightSpoon: e)
+let developer5 = Developer(name: "Developer 5", leftSpoon: e, rightSpoon: a)
+
+let team = [developer1, developer2, developer3, developer4, developer5]
+
+DispatchQueue.concurrentPerform(iterations: 5) {
+    team[$0].run()
+}
