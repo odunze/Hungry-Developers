@@ -17,13 +17,14 @@ class Spoon {
     func pickUp() {
         
         lock.lock()
-        
+       putDown()
+
     }
     
     func putDown() {
         lock.unlock()
         
-    }
+        }
 }
 
 
@@ -58,8 +59,8 @@ class Developer {
         
         defer {
             leftSpoon.putDown()
-            rightSpoon.putDown()
             print("\(name) put the spoons down")
+            rightSpoon.putDown()
         }
     }
     
@@ -87,6 +88,11 @@ let developer5 = Developer(name: "Developer 5", leftSpoon: e, rightSpoon: a)
 
 let team = [developer1, developer2, developer3, developer4, developer5]
 
-DispatchQueue.concurrentPerform(iterations: 5) {
-    team[$0].run()
+//DispatchQueue.concurrentPerform(iterations: 5) {
+//}
+
+DispatchQueue.concurrentPerform(iterations: 1) {_ in
+for x in team {
+    x.run()
+    }
 }
