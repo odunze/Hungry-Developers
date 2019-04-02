@@ -14,10 +14,16 @@ PlaygroundPage.current.liveView = views[0] as! NSView
 
 class Spoon {
     
+    let index: Int
+    
+    init(index: Int) {
+        self.index = index
+    }
+    
     func pickUp() {
         
         lock.lock()
-       putDown()
+       //putDown()
 
     }
     
@@ -73,11 +79,11 @@ class Developer {
 
 let lock = NSLock()
 
-let a = Spoon()
-let b = Spoon()
-let c = Spoon()
-let d = Spoon()
-let e = Spoon()
+let a = Spoon(index: 1)
+let b = Spoon(index: 2)
+let c = Spoon(index: 3)
+let d = Spoon(index: 4)
+let e = Spoon(index: 5)
 
 
 let developer1 = Developer(name: "Developer 1", leftSpoon: a, rightSpoon: b)
@@ -88,11 +94,8 @@ let developer5 = Developer(name: "Developer 5", leftSpoon: e, rightSpoon: a)
 
 let team = [developer1, developer2, developer3, developer4, developer5]
 
-//DispatchQueue.concurrentPerform(iterations: 5) {
-//}
 
-DispatchQueue.concurrentPerform(iterations: 1) {_ in
-for x in team {
-    x.run()
-    }
+
+DispatchQueue.concurrentPerform(iterations: 5) {devIndex in
+    team[devIndex].run()
 }
